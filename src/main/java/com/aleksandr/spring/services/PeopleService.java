@@ -1,6 +1,5 @@
 package com.aleksandr.spring.services;
 
-import com.aleksandr.spring.dao.PersonDao;
 import com.aleksandr.spring.models.Book;
 import com.aleksandr.spring.models.Person;
 import com.aleksandr.spring.repositories.PeopleRepository;
@@ -12,14 +11,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional(readOnly=true)
+@Transactional(readOnly = true)
 public class PeopleService {
-    private final PersonDao personDao;
     private final PeopleRepository peopleRepository;
 
     @Autowired
-    public PeopleService(PersonDao personDao, PeopleRepository peopleRepository) {
-        this.personDao = personDao;
+    public PeopleService(PeopleRepository peopleRepository) {
         this.peopleRepository = peopleRepository;
     }
 
@@ -51,8 +48,8 @@ public class PeopleService {
         peopleRepository.deleteById(id);
     }
 
-    public List<Book> findBooksByPersonId(int id) {
-        return personDao.findBooksByPersonId(id);
+    public List<Book> findBooksByPersonId(Person person) {
+        return peopleRepository.findBooksByPersonId(person);
     }
 
     public Optional<Person> findPersonByFullName(String fullName) {
