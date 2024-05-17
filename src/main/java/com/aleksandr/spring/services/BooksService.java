@@ -1,7 +1,6 @@
 package com.aleksandr.spring.services;
 
 
-import com.aleksandr.spring.dao.BookDao;
 import com.aleksandr.spring.models.Book;
 import com.aleksandr.spring.models.Person;
 import com.aleksandr.spring.repositories.BooksRepository;
@@ -17,13 +16,11 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 public class BooksService {
-    private final BookDao bookDao;
     private final BooksRepository booksRepository;
 
     @Autowired
-    public BooksService(BooksRepository booksRepository, BookDao bookDao) {
+    public BooksService(BooksRepository booksRepository) {
         this.booksRepository = booksRepository;
-        this.bookDao = bookDao;
     }
 
     public List<Book> findAll() {
@@ -63,7 +60,7 @@ public class BooksService {
     }
 
     public Optional<Person> findPersonByBookId(int bookId) {
-        return bookDao.findPersonByBookId(bookId);
+        return booksRepository.findPersonByBookId(bookId);
     }
 
     @Transactional
