@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Show</title>
+    <style>
+        .overdue {
+            background-color: red;
+        }
+    </style>
 </head>
 <body>
 <p th:text="${person.toString()}">VALUE</p>
@@ -16,17 +21,19 @@
     <hr/>
     <b>Books:</b>
     <br/>
-    <table th:each="book : ${books}">
-        <tr th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getAgeOfRelease()}">book</tr>
+    <table>
+        <tr th:each="book : ${books}" th:classappend="${book.dateOfAssign.plusDays(10).isBefore(T(java.time.LocalDate).now())} ? 'overdue' : ''">
+            <td th:text="${book.title + ', ' + book.author + ', ' + book.ageOfRelease}">book</td>
+        </tr>
     </table>
     <hr/>
 </div>
 
-<form th:method="GET" th:action="@{/people/{person_id}/edit(person_id=${person.getPersonId()})}">
+<form th:method="GET" th:action="@{/people/{person_id}/edit(person_id=${person.personId})}">
     <input type="submit" th:value="Edit"/>
 </form>
 
-<form th:method="DELETE" th:action="@{/people/{person_id}(person_id=${person.getPersonId()})}">
+<form th:method="DELETE" th:action="@{/people/{person_id}(person_id=${person.personId})}">
     <input type="submit" value="Delete"/>
 </form>
 </body>
