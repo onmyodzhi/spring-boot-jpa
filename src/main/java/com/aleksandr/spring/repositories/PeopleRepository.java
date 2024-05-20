@@ -12,8 +12,8 @@ import java.util.Optional;
 
 @Repository
 public interface PeopleRepository extends JpaRepository<Person, Integer> {
-    @Query("SELECT b FROM Book b where b.owner = :id")
-    List<Book> findBooksByPersonId(@Param("id")Person person);
+    @Query("SELECT p FROM Book b JOIN b.owner p WHERE b.bookId=:bookId")
+    Optional<Person> findPersonByBookId(@Param("bookId") Integer bookId);
 
     Optional<Person> findPersonByFullName(String fullName);
 }

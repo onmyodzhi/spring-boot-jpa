@@ -1,5 +1,6 @@
 package com.aleksandr.spring.controllers;
 
+import com.aleksandr.spring.api.BookAPI;
 import com.aleksandr.spring.models.Book;
 import com.aleksandr.spring.models.Person;
 import com.aleksandr.spring.services.BooksService;
@@ -17,7 +18,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/books")
-public class BooksController {
+public class BooksController implements BookAPI {
     private final BooksService booksService;
     private final PeopleService peopleService;
 
@@ -27,7 +28,7 @@ public class BooksController {
         this.peopleService = peopleService;
     }
 
-    @GetMapping
+    @Override
     public String index(Model model,
                         @RequestParam(name = "page", required = false) Integer page,
                         @RequestParam(name = "books_per_page", required = false) Integer booksPerPage) {
@@ -41,12 +42,12 @@ public class BooksController {
     }
 
 
-    @GetMapping("/{id}")
+    @Override
     public String show(@PathVariable("id") int bookId, Model model,
                        @ModelAttribute("person") Person person) {
         model.addAttribute("book", booksService.findById(bookId));
 
-        Optional<Person> bookOwner = booksService.findPersonByBookId(bookId);
+        Optional<Person> bookOwner = peopleService.findPersonByBookId(bookId);
 
         boolean isOverdue = booksService.checkOverdue(bookId);
         model.addAttribute("overdue", isOverdue);
@@ -57,13 +58,13 @@ public class BooksController {
         return "books/show";
     }
 
-    @GetMapping("/new")
+    @Override
     public String newBook(Model model) {
         model.addAttribute("book", new Book());
         return "books/new";
     }
 
-    @PostMapping
+    @Override
     public String create(@ModelAttribute("book") @Valid Book book, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "books/new";
@@ -72,13 +73,13 @@ public class BooksController {
         return "redirect:/books";
     }
 
-    @GetMapping("/{book_id}/edit")
+    @Override
     public String edit(Model model, @PathVariable("book_id") int bookId) {
         model.addAttribute("book", booksService.findById(bookId));
         return "books/edit";
     }
 
-    @PatchMapping("/{book_id}")
+    @Override
     public String update(@PathVariable("book_id") int bookId,
                          @ModelAttribute("book") @Valid Book book,
                          BindingResult bindingResult) {
@@ -89,26 +90,26 @@ public class BooksController {
         return "redirect:/books";
     }
 
-    @DeleteMapping("/{book_id}")
+    @Override
     public String delete(@PathVariable("book_id") int bookId) {
         booksService.delete(bookId);
         return "redirect:/books";
     }
 
-    @PatchMapping("/{id}/release")
+    @Override
     public String release(@PathVariable("id") int bookId) {
         booksService.release(bookId);
         return "redirect:/books/" + bookId;
     }
 
-    @PatchMapping("/{id}/assign")
+    @Override
     public String assign(@PathVariable("id") int id,
                          @ModelAttribute("person") Person selectedPerson) {
         booksService.assignPersonToBook(id, selectedPerson);
         return "redirect:/books/" + id;
     }
 
-    @GetMapping("/search")
+    @Override
     public String search(Model model,
                          @RequestParam(name = "titleLike", required = false) String title) {
         List<Book> books = new ArrayList<>();

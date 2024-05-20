@@ -3,6 +3,7 @@ package com.aleksandr.spring.services;
 import com.aleksandr.spring.models.Book;
 import com.aleksandr.spring.models.Person;
 import com.aleksandr.spring.repositories.PeopleRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,13 +13,9 @@ import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class PeopleService {
     private final PeopleRepository peopleRepository;
-
-    @Autowired
-    public PeopleService(PeopleRepository peopleRepository) {
-        this.peopleRepository = peopleRepository;
-    }
 
     public List<Person> findAll() {
         return peopleRepository.findAll();
@@ -48,8 +45,8 @@ public class PeopleService {
         peopleRepository.deleteById(id);
     }
 
-    public List<Book> findBooksByPersonId(Person person) {
-        return peopleRepository.findBooksByPersonId(person);
+    public Optional<Person> findPersonByBookId(int bookId) {
+        return peopleRepository.findPersonByBookId(bookId);
     }
 
     public Optional<Person> findPersonByFullName(String fullName) {

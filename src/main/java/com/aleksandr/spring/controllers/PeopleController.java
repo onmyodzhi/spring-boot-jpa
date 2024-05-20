@@ -1,6 +1,8 @@
 package com.aleksandr.spring.controllers;
 
+import com.aleksandr.spring.api.PersonAPI;
 import com.aleksandr.spring.models.Person;
+import com.aleksandr.spring.services.BooksService;
 import com.aleksandr.spring.services.PeopleService;
 import com.aleksandr.spring.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,36 +15,38 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/people")
-public class PeopleController {
+public class PeopleController implements PersonAPI {
     private final PeopleService peopleService;
     private final PersonValidator validator;
+    private final BooksService booksService;
 
     @Autowired
-    public PeopleController(PeopleService peopleService, PersonValidator validator) {
+    public PeopleController(PeopleService peopleService, PersonValidator validator, BooksService booksService) {
         this.peopleService = peopleService;
         this.validator = validator;
+        this.booksService = booksService;
     }
 
-    @GetMapping()
+    @Override
     public String index(Model model) {
         model.addAttribute("people", peopleService.findAll());
         return "people/index";
     }
 
-    @GetMapping("/{person_id}")
+    @Override
     public String show(@PathVariable("person_id") int id, Model model) {
         model.addAttribute("person", peopleService.findById(id));
-        model.addAttribute("books", peopleService.findBooksByPersonId(peopleService.findById(id)));
+        model.addAttribute("books", booksService.findBooksByPersonId(peopleService.findById(id)));
         return "people/show";
     }
 
-    @GetMapping("/new")
+    @Override
     public String newPerson(@ModelAttribute("person") Person person) {
         return "people/new";
     }
 
 
-    @PostMapping()
+    @Override
     public String create(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult) {
         validator.validate(person, bindingResult);
@@ -55,13 +59,13 @@ public class PeopleController {
         return "redirect:/people";
     }
 
-    @GetMapping("/{person_id}/edit")
+    @Override
     public String edit(Model model, @PathVariable("person_id") int id) {
         model.addAttribute("person", peopleService.findById(id));
         return "people/edit";
     }
 
-    @PatchMapping("/{person_id}")
+    @Override
     public String update(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult,
                          @PathVariable("person_id") int id) {
@@ -75,7 +79,7 @@ public class PeopleController {
         return "redirect:/people";
     }
 
-    @DeleteMapping("/{person_id}")
+    @Override
     public String delete(@PathVariable("person_id") int id) {
         peopleService.delete(id);
         return "redirect:/people";

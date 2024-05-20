@@ -4,6 +4,7 @@ package com.aleksandr.spring.services;
 import com.aleksandr.spring.models.Book;
 import com.aleksandr.spring.models.Person;
 import com.aleksandr.spring.repositories.BooksRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,13 +16,9 @@ import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class BooksService {
     private final BooksRepository booksRepository;
-
-    @Autowired
-    public BooksService(BooksRepository booksRepository) {
-        this.booksRepository = booksRepository;
-    }
 
     public List<Book> findAll() {
         List<Book> sortedBooks = booksRepository.findAll();
@@ -59,9 +56,7 @@ public class BooksService {
         booksRepository.deleteById(id);
     }
 
-    public Optional<Person> findPersonByBookId(int bookId) {
-        return booksRepository.findPersonByBookId(bookId);
-    }
+
 
     @Transactional
     public void release(int bookId) {
@@ -89,6 +84,10 @@ public class BooksService {
 
     public List<Book> findAllByTitleStartingWith(String title) {
         return booksRepository.findAllByTitleStartingWith(title);
+    }
+
+    public List<Book> findBooksByPersonId(Person person) {
+        return booksRepository.findBooksByPersonId(person);
     }
 
     public List<Book> getPageOfBooks(int page, int booksPerPage) {

@@ -15,6 +15,6 @@ public interface BooksRepository extends JpaRepository<Book, Integer> {
     @Query("SELECT b FROM Book b WHERE b.title LIKE CONCAT(:title, '%')")
     List<Book> findAllByTitleStartingWith(@Param("title") String title);
 
-    @Query("SELECT p FROM Book b JOIN b.owner p WHERE b.bookId=:bookId")
-    Optional<Person> findPersonByBookId(@Param("bookId") Integer bookId);
+    @Query("SELECT b FROM Book b where b.owner = :id")
+    List<Book> findBooksByPersonId(@Param("id")Person person);
 }
