@@ -1,14 +1,21 @@
 package com.aleksandr.spring.models;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "Person")
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode
 public class Person {
 
     @Id
@@ -34,54 +41,6 @@ public class Person {
     public Person(String FullName, int ageOfYear) {
         this.fullName = FullName;
         this.yearOfBirth = ageOfYear;
-    }
-
-    public Person() {
-    }
-
-    public int getPersonId() {
-        return personId;
-    }
-
-    public void setPersonId(int personId) {
-        this.personId = personId;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public int getYearOfBirth() {
-        return yearOfBirth;
-    }
-
-    public void setYearOfBirth(int yearOfBirth) {
-        this.yearOfBirth = yearOfBirth;
-    }
-
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Person)) return false;
-        Person person = (Person) o;
-        return getPersonId() == person.getPersonId() && getYearOfBirth() == person.getYearOfBirth() && Objects.equals(getFullName(), person.getFullName());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getPersonId(), getFullName(), getYearOfBirth());
     }
 
     @Override

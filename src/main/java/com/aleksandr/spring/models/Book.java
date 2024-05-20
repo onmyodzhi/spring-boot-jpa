@@ -1,15 +1,22 @@
 package com.aleksandr.spring.models;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Entity
 @Table(name = "Book")
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode
 public class Book implements Comparable<Book>{
 
     @Id
@@ -46,73 +53,9 @@ public class Book implements Comparable<Book>{
         this.ageOfRelease = ageOfRelease;
     }
 
-    public Book() {
-    }
-
     @Override
     public int compareTo(Book otherBook) {
         return this.ageOfRelease - otherBook.ageOfRelease;
-    }
-
-    public int getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
-    }
-
-    public @NotEmpty(message = "field title should not be empty") @Size(max = 100) String getTitle() {
-        return title;
-    }
-
-    public void setTitle(@NotEmpty(message = "field title should not be empty") @Size(max = 100) String title) {
-        this.title = title;
-    }
-
-    public @NotEmpty(message = "field author should not be empty") @Pattern(regexp = "[A-Z][- A-Za-z]+", message = "The author must begin with a capital letter and can only contain letters, hyphens, and spaces") String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(@NotEmpty(message = "field author should not be empty") @Pattern(regexp = "[A-Z][- A-Za-z]+", message = "The author must begin with a capital letter and can only contain letters, hyphens, and spaces") String author) {
-        this.author = author;
-    }
-
-    public @NotNull(message = "field age of release should not be empty") @Min(value = -2000) @Max(value = 2024) int getAgeOfRelease() {
-        return ageOfRelease;
-    }
-
-    public void setAgeOfRelease(@NotNull(message = "field age of release should not be empty") @Min(value = -2000) @Max(value = 2024) int ageOfRelease) {
-        this.ageOfRelease = ageOfRelease;
-    }
-
-    public LocalDate getDateOfAssign() {
-        return dateOfAssign;
-    }
-
-    public void setDateOfAssign(LocalDate dateOfAssign) {
-        this.dateOfAssign = dateOfAssign;
-    }
-
-    public Person getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Person owner) {
-        this.owner = owner;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Book)) return false;
-        Book book = (Book) o;
-        return getBookId() == book.getBookId() && Objects.equals(getTitle(), book.getTitle()) && Objects.equals(getAuthor(), book.getAuthor()) && Objects.equals(getAgeOfRelease(), book.getAgeOfRelease());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getBookId(), getTitle(), getAuthor(), getAgeOfRelease());
     }
 
     @Override

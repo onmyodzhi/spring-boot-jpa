@@ -1,6 +1,5 @@
 package com.aleksandr.spring.services;
 
-import com.aleksandr.spring.models.Book;
 import com.aleksandr.spring.models.Person;
 import com.aleksandr.spring.repositories.PeopleRepository;
 import lombok.RequiredArgsConstructor;
